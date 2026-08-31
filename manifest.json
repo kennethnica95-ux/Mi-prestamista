@@ -1,1 +1,10 @@
-{"name": "Mi Prestamista 2.0", "short_name": "Prestamista", "start_url": "./", "display": "standalone", "background_color": "#0d1117", "theme_color": "#1454b8", "orientation": "portrait"}
+{
+  "name":"Mi Prestamista",
+  "short_name":"Prestamista",
+  "start_url":"./index.html",
+  "display":"standalone",
+  "background_color":"#0d1117",
+  "theme_color":"#1454b8",
+  "orientation":"portrait",
+  "description":"Calculadora y control de préstamos quincenales."
+}

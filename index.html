@@ -1,135 +1,85 @@
 <!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="theme-color" content="#0d1117">
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111"><link rel="manifest" href="manifest.json">
 <title>Mi Prestamista</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#0d1117;color:#f4f6fa;font-family:Arial,sans-serif}
-main{max-width:600px;margin:auto;padding:15px 14px 40px}h1{font-size:27px;margin:5px 0}.sub{color:#9ca5b4;margin-bottom:15px}
-.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:13px}.nav button{padding:11px 5px;border:0;border-radius:12px;background:#202633;color:#dce2ed;font-weight:bold}.nav button.active{background:#a9c1ff;color:#10234c}
-section{display:none}.show{display:block}.card{background:#171c25;border:1px solid #2d3543;border-radius:19px;padding:16px;margin-bottom:13px}
-label{display:block;color:#c7cdd8;font-size:13px;margin:11px 0 6px}input,select{width:100%;padding:13px;border-radius:12px;border:1px solid #3c4555;background:#0f141c;color:white;font-size:17px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.full{grid-column:1/-1}
-button{cursor:pointer}.primary{width:100%;padding:15px;border:0;border-radius:13px;background:#abc3ff;color:#10234d;font-weight:bold;font-size:17px;margin-top:14px}
-.secondary{width:100%;padding:12px;border:1px solid #414b5b;border-radius:12px;background:transparent;color:#ddd;margin-top:8px}
-.summary{background:#1454b8;border-radius:20px;padding:17px;margin-bottom:13px}.big{font-size:36px;font-weight:800;margin:3px 0 14px}.mini{display:grid;grid-template-columns:1fr 1fr;gap:8px}.box{background:#20325b;border-radius:12px;padding:10px}.box small{display:block;color:#bdc9df;margin-bottom:4px}.box b{font-size:15px}
-table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px 4px;border-bottom:1px solid #303746;text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:center}
-.scroll{overflow:auto}.client{display:flex;justify-content:space-between;align-items:center;padding:13px;background:#202631;border-radius:13px;margin:7px 0}.client b{display:block}.client small{color:#aab1be}.pill{padding:6px 9px;border-radius:10px;background:#283e66;color:#cfe0ff;font-size:12px}
-.empty{color:#9299a7;text-align:center;padding:20px}.danger{color:#ffb4b4;border-color:#704040}
-.note{color:#8f98a7;font-size:12px;line-height:1.45;margin-top:12px}
-@media(max-width:390px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.nav button{font-size:11px}}
-</style>
-<link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Mi Prestamista">
-</head>
-<body>
-<main>
-<h1>💰 Mi Prestamista</h1>
-<div class="sub">Calculadora y control de préstamos quincenales</div>
+body{font-family:Arial;margin:0;background:#f4f4f4;color:#111}header{background:#111;color:white;padding:18px;font-size:23px;font-weight:bold}
+main{max-width:700px;margin:auto;padding:15px}.card{background:white;padding:18px;border-radius:15px;margin-bottom:15px}
+label{display:block;font-weight:bold;margin:11px 0 5px}input,select,button{width:100%;padding:12px;border-radius:9px;border:1px solid #ccc;font-size:16px;box-sizing:border-box}
+button{background:#111;color:white;font-weight:bold;margin-top:16px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hidden{display:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{background:#eee;padding:12px;border-radius:9px}.box small{display:block;color:#666}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{padding:8px;border-bottom:1px solid #ddd;text-align:left}.note{font-size:13px;color:#666}
+</style></head><body>
+<header>Mi Prestamista</header><main>
+<div class="card"><h2>Nuevo préstamo</h2>
+<label>Cliente</label><input id="cliente" placeholder="Nombre del cliente"><label>Moneda</label><select id="moneda"><option value="NIO">Córdobas (C$)</option><option value="USD">Dólares (US$)</option></select>
+<div class="row"><div><label>Capital (C$)</label><input id="capital" type="number" min="0"></div>
+<div><label>Interés por período (%)</label><input id="interes" type="number" value="4" min="0" step=".01"></div></div>
+<div class="row"><div><label>Frecuencia</label><select id="frecuencia"><option value="q">Quincenal</option><option value="m">Mensual</option></select></div>
+<div><label>Número de pagos</label><input id="pagos" type="number" value="10" min="1"></div></div>
 
-<div class="nav">
-<button class="active" onclick="tab('calc',this)">🧮 Calcular</button>
-<button onclick="tab('clients',this)">👥 Clientes</button>
-<button onclick="tab('history',this)">📋 Historial</button>
-</div>
+<div id="qbox"><label>Días de pago quincenal</label>
+<select id="patron">
+<option value="15,30">15 y 30 ⭐</option><option value="2,17">2 y 17</option><option value="3,18">3 y 18</option>
+<option value="4,19">4 y 19</option><option value="5,20">5 y 20</option><option value="6,21">6 y 21</option>
+<option value="7,22">7 y 22</option><option value="8,23">8 y 23</option><option value="9,24">9 y 24</option>
+<option value="10,25">10 y 25</option><option value="11,26">11 y 26</option><option value="12,27">12 y 27</option>
+<option value="13,28">13 y 28</option><option value="14,29">14 y 29</option><option value="custom">Personalizado</option>
+</select>
+<div id="custom" class="row hidden"><div><label>Día 1</label><input id="d1" type="number" value="15" min="1" max="31"></div>
+<div><label>Día 2</label><input id="d2" type="number" value="30" min="1" max="31"></div></div></div>
 
-<section id="calc" class="show">
-<div class="card">
-<div class="grid">
-<div class="full"><label>Nombre del cliente</label><input id="name" placeholder="Ej. Juan Pérez"></div>
-<div><label>Capital (C$)</label><input id="capital" type="number" inputmode="decimal" value="10000"></div>
-<div><label>Interés por quincena (%)</label><input id="rate" type="number" inputmode="decimal" value="4" step=".1"></div>
-<div><label>Número de quincenas</label><input id="terms" type="number" inputmode="numeric" value="10"></div>
-<div><label>Fecha del primer pago</label><input id="date" type="date"></div>
-</div>
-<button class="primary" onclick="calculate()">CALCULAR PRÉSTAMO</button>
-</div>
+<div id="mbox" class="hidden"><label>Día de pago mensual</label><select id="md"></select></div>
+<label>Fecha desde la que empieza el calendario</label><input id="inicio" type="date">
+<button id="calc">Calcular préstamo</button></div>
 
-<div id="result"></div>
-
-<div class="card">
-<button class="primary" onclick="saveLoan()">💾 Guardar préstamo</button>
-<div class="note">El préstamo guardado queda en este dispositivo. No se envía a ningún servidor.</div>
-</div>
-</section>
-
-<section id="clients">
-<div class="card">
-<h2 style="margin-top:0">👥 Mis clientes</h2>
-<div id="clientList"></div>
-</div>
-</section>
-
-<section id="history">
-<div class="card">
-<h2 style="margin-top:0">📋 Préstamos guardados</h2>
-<div id="historyList"></div>
-<button class="secondary danger" onclick="clearAll()">Borrar todos los datos</button>
-</div>
-</section>
+<div id="res" class="card hidden"><h2>Resumen</h2><div id="clienteOut" class="note"></div>
+<div class="grid"><div class="box"><small>Capital</small><b id="capitalOut"></b></div>
+<div class="box"><small>Interés total</small><b id="interestOut"></b></div><div class="box"><small>Total</small><b id="totalOut"></b></div>
+<div class="box"><small>Cada pago</small><b id="cuotaOut"></b></div></div><p id="tipo" class="note"></p>
+<h3>Tabla para enviar al cliente</h3>
+<div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>Capital</th><th>Interés</th><th>Cuota</th><th>Saldo</th></tr></thead><tbody id="tbody"></tbody></table></div>
+<p class="note">El saldo mostrado es el saldo pendiente después de cada pago.</p></div>
 </main>
-
 <script>
-let loans=JSON.parse(localStorage.getItem('prestamos_v2')||'[]');
-const money=n=>new Intl.NumberFormat('es-NI',{style:'currency',currency:'NIO',minimumFractionDigits:2}).format(n);
-function todayPlus(days=0){let d=new Date();d.setDate(d.getDate()+days);return d.toISOString().slice(0,10)}
-document.getElementById('date').value=todayPlus(15);
-
-function tab(id,btn){
- document.querySelectorAll('section').forEach(x=>x.classList.remove('show'));
- document.getElementById(id).classList.add('show');
- document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');
- if(id==='clients')renderClients(); if(id==='history')renderHistory();
+const $=x=>document.getElementById(x);
+function money(n,currency){return new Intl.NumberFormat(currency==="USD"?"en-US":"es-NI",{style:"currency",currency:currency,maximumFractionDigits:2}).format(n)}
+for(let i=1;i<=31;i++)$("md").insertAdjacentHTML("beforeend",`<option value="${i}" ${i==30?"selected":""}>${i}</option>`);
+let now=new Date();$("inicio").value=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+$("frecuencia").onchange=()=>{$("qbox").classList.toggle("hidden",$("frecuencia").value!="q");$("mbox").classList.toggle("hidden",$("frecuencia").value=="q")};
+$("patron").onchange=()=>$("custom").classList.toggle("hidden",$("patron").value!="custom");
+function last(y,m){return new Date(y,m+1,0).getDate()} function mk(y,m,d){return new Date(y,m,Math.min(d,last(y,m)))}
+function fmt(d){return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear()}
+function qdates(base,n,days){
+ let y=base.getFullYear(),m=base.getMonth(),first=null,idx=0;
+ for(let k=0;k<24&&!first;k++){for(let i=0;i<2;i++){let d=mk(y,m,days[i]);if(d>=base){first=d;idx=i;break}}if(!first){m++;if(m>11){m=0;y++}}}
+ let a=[first]; for(let i=1;i<n;i++){idx=(idx+1)%2;if(idx==0){m++;if(m>11){m=0;y++}}a.push(mk(y,m,days[idx]));} return a;
 }
-function data(){
- return {name:document.getElementById('name').value.trim()||'Sin nombre',
- P:Math.max(0,+document.getElementById('capital').value||0),
- R:Math.max(0,+document.getElementById('rate').value||0)/100,
- N:Math.max(1,Math.floor(+document.getElementById('terms').value||1)),
- date:document.getElementById('date').value||todayPlus(15)}
+function mdates(base,n,day){
+ let y=base.getFullYear(),m=base.getMonth(),d=mk(y,m,day);if(d<base){m++;if(m>11){m=0;y++}d=mk(y,m,day)}
+ let a=[d];for(let i=1;i<n;i++){m++;if(m>11){m=0;y++}a.push(mk(y,m,day))}return a;
 }
-function calculate(){
- const x=data(), interest=x.P*x.R, pp=x.P/x.N, pay=pp+interest, total=x.P+interest*x.N;
- let bal=x.P,rows='';
- for(let i=1;i<=x.N;i++){
-   let cap=i===x.N?bal:pp;bal=Math.max(0,bal-cap);
-   let dt=new Date(x.date+'T12:00:00');dt.setDate(dt.getDate()+((i-1)*14));
-   rows+=`<tr><td>${i}</td><td>${dt.toLocaleDateString('es-NI')}</td><td>${money(cap)}</td><td>${money(interest)}</td><td>${money(cap+interest)}</td><td>${money(bal)}</td></tr>`;
- }
- document.getElementById('result').innerHTML=`
- <div class="summary"><small>CUOTA QUINCENAL</small><div class="big">${money(pay)}</div>
- <div class="mini"><div class="box"><small>Capital / quincena</small><b>${money(pp)}</b></div>
- <div class="box"><small>Interés / quincena</small><b>${money(interest)}</b></div>
- <div class="box"><small>Total intereses</small><b>${money(interest*x.N)}</b></div>
- <div class="box"><small>Total a pagar</small><b>${money(total)}</b></div></div></div>
- <div class="card"><b>📅 Calendario de pagos — ${x.name}</b><div class="scroll"><table><thead><tr><th>#</th><th>Fecha</th><th>Capital</th><th>Interés</th><th>Cuota</th><th>Saldo</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
-}
-function saveLoan(){
- const x=data();x.id=Date.now();x.saved=new Date().toISOString();loans.push(x);localStorage.setItem('prestamos_v2',JSON.stringify(loans));alert('Préstamo guardado correctamente.');renderHistory();
-}
-function renderClients(){
- let names={};loans.forEach(l=>{names[l.name]=(names[l.name]||0)+1});
- const arr=Object.entries(names);
- document.getElementById('clientList').innerHTML=arr.length?arr.map(([n,c])=>`<div class="client"><div><b>${esc(n)}</b><small>${c} préstamo${c>1?'s':''}</small></div><span class="pill">${c}</span></div>`).join(''):'<div class="empty">Todavía no hay clientes guardados.</div>';
-}
-function renderHistory(){
- document.getElementById('historyList').innerHTML=loans.length?[...loans].reverse().map(l=>{
- const pay=l.P/l.N+l.P*l.R;
- return `<div class="client"><div><b>${esc(l.name)}</b><small>${money(l.P)} · ${l.R*100}% · ${l.N} quincenas</small></div><span class="pill">${money(pay)}</span></div>`;
- }).join(''):'<div class="empty">No hay préstamos guardados.</div>';
-}
-function clearAll(){if(confirm('¿Borrar todos los préstamos guardados?')){loans=[];localStorage.removeItem('prestamos_v2');renderHistory();renderClients()}}
-function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-['capital','rate','terms','date'].forEach(id=>document.getElementById(id).addEventListener('input',calculate));
-calculate();
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
-}
+$("calc").onclick=()=>{
+ let P=+$("capital").value,r=+$("interes").value/100,n=+$("pagos").value;
+ if(!(P>0&&n>0&&r>=0)){alert("Completá los datos correctamente.");return}
+ let base=new Date($("inicio").value+"T00:00:00"),dates,label;
+ if($("frecuencia").value=="q"){let ds=$("patron").value=="custom"?[+$("d1").value,+$("d2").value]:$("patron").value.split(",").map(Number);
+ if(ds[0]<1||ds[0]>31||ds[1]<1||ds[1]>31||ds[0]==ds[1]){alert("Los días deben ser diferentes y estar entre 1 y 31.");return}
+ ds.sort((a,b)=>a-b);dates=qdates(base,n,ds);label=`Quincenal: ${ds[0]} y ${ds[1]}`}else{let day=+$("md").value;dates=mdates(base,n,day);label=`Mensual: día ${day}`}
+ let currency=$("moneda").value;
+ let ip=P*r, capitalPart=P/n, cuota=capitalPart+ip,totalI=ip*n,total=P+totalI;
+ $("clienteOut").textContent=$("cliente").value?"Cliente: "+$("cliente").value:"";
+ $("capitalOut").textContent=money(P,currency);
+ $("interestOut").textContent=money(totalI,currency);
+ $("totalOut").textContent=money(total,currency);
+ $("cuotaOut").textContent=money(cuota,currency);
+ $("tipo").textContent=label+" · "+(currency==="USD"?"Dólares (US$)":"Córdobas (C$)");
+ let saldo=P;
+ $("tbody").innerHTML=dates.map((d,i)=>{
+   saldo=Math.max(0,saldo-capitalPart);
+   return `<tr><td>${fmt(d)}</td><td>${money(capitalPart,currency)}</td><td>${money(ip,currency)}</td><td>${money(cuota,currency)}</td><td>${money(saldo,currency)}</td></tr>`;
+ }).join("");
+ $("res").classList.remove("hidden");
+};
 </script></body></html>
